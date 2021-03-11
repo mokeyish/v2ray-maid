@@ -1,0 +1,19 @@
+{
+  "sub_url": "https://hjysub1.com/link/6n6XwKOUu88tvYOg?sub=3&extend=1",
+  "program": "v2ray",
+  "ping_times": 5,
+  "proxies": [
+    {
+      "selector": "倍率1",
+      "tag": "x1",
+      "target_file": "v2ray.json",
+      "limit_count": 1
+    },
+    {
+      "selector": "倍率5",
+      "tag": "x5",
+      "target_file": "v2ray.json",
+      "limit_count": 1
+    }
+  ]
+}

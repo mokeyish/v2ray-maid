@@ -1,0 +1,316 @@
+{
+  "dns": {
+    "servers": [
+      {
+        "address": "202.96.128.166",
+        "port": 53,
+        "domains": [
+          "geosite:cn"
+        ]
+      },
+      {
+        "address": "192.168.11.100",
+        "port": 53,
+        "domains": [
+          "domain:k8s"
+        ]
+      },
+      {
+        "address": "10.10.10.1",
+        "port": 53,
+        "domains": [
+          "domain:lan",
+          "regexp:.+-[zZ]$"
+        ]
+      },
+      {
+        "address": "8.8.8.8",
+        "port": 53,
+        "domains": [
+          "regexp:.*$",
+          "domain:github.io"
+        ]
+      }
+    ],
+    "hosts": {
+      "geosite:category-ads": "127.0.0.1",
+      "mokeyish.com": "1.2.3.4"
+    }
+  },
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": 1080,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 3080,
+      "protocol": "http",
+      "settings": {
+        "timeout": 360
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "x5",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "sg1.hjynode.com",
+            "port": 443,
+            "users": [
+              {
+                "id": "39da64be-7389-3d99-8af4-4d169f8146ad",
+                "alterId": 2,
+                "security": "auto",
+                "level": 8
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "sg1.hjynode.com",
+          "allowInsecure": false
+        },
+        "wsSettings": {
+          "path": "/v2ray",
+          "headers": {
+            "host": "sg1.hjynode.com"
+          }
+        }
+      },
+      "mux": {
+        "enabled": false,
+        "concurrency": 8
+      }
+    },
+    {
+      "tag": "x1",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "jpsoftbankvip.hjynode.com",
+            "port": 443,
+            "users": [
+              {
+                "id": "39da64be-7389-3d99-8af4-4d169f8146ad",
+                "alterId": 2,
+                "security": "auto",
+                "level": 8
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "jpsoftbankvip.hjynode.com",
+          "allowInsecure": false
+        },
+        "wsSettings": {
+          "path": "/v2ray",
+          "headers": {
+            "host": "jpsoftbankvip.hjynode.com"
+          }
+        }
+      },
+      "mux": {
+        "enabled": false,
+        "concurrency": 8
+      }
+    },
+    {
+      "tag": "bda-out",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "vpn.brilliant-solution.com",
+            "port": 12323,
+            "users": [
+              {
+                "id": "6262245d-abe3-4aec-8df8-7d49d17cba18",
+                "alterId": 64,
+                "security": "aes-128-cfb",
+                "level": 0
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none",
+        "tlsSettings": {
+          "allowInsecure": true
+        },
+        "tcpSettings": {
+          "header": {
+            "type": "none"
+          }
+        }
+      },
+      "mux": {
+        "enabled": true,
+        "concurrency": 8
+      }
+    },
+    {
+      "tag": "home-out",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "nps.yish.org",
+            "port": 12323,
+            "users": [
+              {
+                "id": "1ba67051-28e9-49c9-a7ef-c7a989056d5b",
+                "alterId": 64
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "mkcp",
+        "kcpSettings": {
+          "uplinkCapacity": 5,
+          "downlinkCapacity": 100,
+          "congestion": true,
+          "header": {
+            "type": "none"
+          }
+        }
+      }
+    },
+    {
+      "tag": "tor-out",
+      "protocol": "socks",
+      "settings": {
+        "servers": [
+          {
+            "address": "127.0.0.1",
+            "port": 9050
+          }
+        ]
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIP"
+      }
+    },
+    {
+      "tag": "blocked",
+      "protocol": "blackhole",
+      "settings": {}
+    },
+    {
+      "tag": "dns-out",
+      "protocol": "dns",
+      "settings": {}
+    }
+  ],
+  "routing": {
+    "domainStrategy": "IPOnDemand",
+    "balancers": [
+      {
+        "tag": "x5-proxy",
+        "selector": [
+          "x5"
+        ]
+      },
+      {
+        "tag": "x1-proxy",
+        "selector": [
+          "x1"
+        ]
+      }
+    ],
+    "rules": [
+      {
+        "type": "field",
+        "port": "53",
+        "network": "udp",
+        "inboundTag": [
+          "tun2socks"
+        ],
+        "outboundTag": "dns-out"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ads-all"
+        ],
+        "outboundTag": "blocked"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:onion"
+        ],
+        "outboundTag": "tor-out"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "geoip:cn",
+          "geoip:private"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "8.8.8.8",
+          "1.1.1.1"
+        ],
+        "balancerTag": "x5-proxy"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:safebrowsing.googleapis.com",
+          "domain:apple.com",
+          "domain:icloud.com",
+          "domain:pass.yish.org",
+          "geosite:cn",
+          "domain:local",
+          "domain:lan"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:microsoft",
+          "geosite:stackexchange",
+          "geosite:google"
+        ],
+        "balancerTag": "x5-proxy"
+      },
+      {
+        "type": "field",
+        "network": "tcp,udp",
+        "balancerTag": "x5-proxy"
+      }
+    ]
+  }
+}
