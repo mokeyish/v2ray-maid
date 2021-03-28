@@ -110,7 +110,6 @@ pub mod routing {
     }
 }
 
-
 pub mod inbound {
     use super::*;
 
@@ -155,7 +154,7 @@ pub mod inbound {
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
     pub struct AccountObject {
         pub user: String,
-        pub pass: String
+        pub pass: String,
     }
 
     #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -204,7 +203,7 @@ pub mod outbound {
         AsIs,
         UseIP,
         UseIPv4,
-        UseIPv6
+        UseIPv6,
     }
 
     #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -224,7 +223,7 @@ pub mod outbound {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub tag: Option<String>,
         #[serde(rename = "transportLayer", skip_serializing_if = "Option::is_none")]
-        pub transport_layer: Option<bool>
+        pub transport_layer: Option<bool>,
     }
 
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
@@ -234,7 +233,6 @@ pub mod outbound {
         pub concurrency: Option<i32>,
     }
 }
-
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ServerObject {
@@ -276,7 +274,6 @@ pub struct Response {
 pub mod stream_settings {
     use super::*;
 
-
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
     pub struct StreamSettingsObject {
         pub network: Option<String>,
@@ -297,7 +294,7 @@ pub mod stream_settings {
         #[serde(rename = "dsSettings", skip_serializing_if = "Option::is_none")]
         pub ds_settings: Option<DomainSocketObject>,
         #[serde(rename = "sockopt", skip_serializing_if = "Option::is_none")]
-        pub sock_opt: Option<SockOpt>
+        pub sock_opt: Option<SockOpt>,
     }
 
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
@@ -311,7 +308,7 @@ pub mod stream_settings {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub certificates: Option<Vec<CertificateObject>>,
         #[serde(rename = "disableSystemRoot", skip_serializing_if = "Option::is_none")]
-        pub disable_system_root: Option<bool>
+        pub disable_system_root: Option<bool>,
     }
 
     #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -325,9 +322,8 @@ pub mod stream_settings {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub certificate: Option<Vec<String>>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        pub key: Option<Vec<String>>
+        pub key: Option<Vec<String>>,
     }
-
 
     #[derive(Debug, Clone, Deserialize, Serialize)]
     pub struct TcpObject {
@@ -343,8 +339,8 @@ pub mod stream_settings {
         None,
         Http {
             request: Option<HttpRequestObject>,
-            response: Option<HttpResponseObject>
-        }
+            response: Option<HttpResponseObject>,
+        },
     }
 
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
@@ -356,13 +352,13 @@ pub mod stream_settings {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub path: Option<Vec<String>>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        pub headers: Option<HashMap<String, HttpHeaderValueObject>>
+        pub headers: Option<HashMap<String, HttpHeaderValueObject>>,
     }
     #[derive(Debug, Clone, Serialize, Deserialize)]
     #[serde(untagged)]
     pub enum HttpHeaderValueObject {
         String(String),
-        Array(Vec<String>)
+        Array(Vec<String>),
     }
 
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
@@ -374,7 +370,7 @@ pub mod stream_settings {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub reason: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        pub headers: Option<HashMap<String, HttpHeaderValueObject>>
+        pub headers: Option<HashMap<String, HttpHeaderValueObject>>,
     }
 
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
@@ -396,19 +392,21 @@ pub mod stream_settings {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub header: Option<HeaderObject>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        pub seed: Option<String>
+        pub seed: Option<String>,
     }
 
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
     pub struct HeaderObject {
         #[serde(skip_serializing_if = "Option::is_none")]
-        pub r#type: Option<String>
+        pub r#type: Option<String>,
     }
-
 
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
     pub struct WebSocketObject {
-        #[serde(rename = "acceptProxyProtocol", skip_serializing_if = "Option::is_none")]
+        #[serde(
+            rename = "acceptProxyProtocol",
+            skip_serializing_if = "Option::is_none"
+        )]
         pub accept_proxy_protocol: Option<bool>,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub path: Option<String>,
@@ -441,7 +439,7 @@ pub mod stream_settings {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub r#abstract: Option<bool>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        pub padding: Option<bool>
+        pub padding: Option<bool>,
     }
 
     #[derive(Default, Debug, Clone, Deserialize, Serialize)]
@@ -451,11 +449,9 @@ pub mod stream_settings {
         #[serde(rename = "tcpFastOpen", skip_serializing_if = "Option::is_none")]
         pub tcp_fast_open: Option<bool>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        pub tproxy: Option<bool>
+        pub tproxy: Option<bool>,
     }
 }
-
-
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct LogObject {
@@ -473,6 +469,3 @@ pub enum Port {
     Int(u16),
     String(String),
 }
-
-
-

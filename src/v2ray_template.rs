@@ -1,6 +1,6 @@
+use crate::v2ray_object::V2rayObject;
 use crate::vlink::VLink;
 use std::collections::HashMap;
-use crate::v2ray_object::V2rayObject;
 
 const V2RAY_TPL: &str = r#"
 {
@@ -131,7 +131,7 @@ impl VLink {
                     .get_mut(0)
                     .unwrap();
                 vnext.address = self.address.clone();
-                vnext.port = crate::v2ray_object::Port::Int( self.port);
+                vnext.port = crate::v2ray_object::Port::Int(self.port);
 
                 let user = vnext.users.get_mut(0).unwrap();
                 user.id = self.id.clone();
@@ -147,39 +147,49 @@ impl VLink {
         }
     }
 
-    fn gen_bound_stream_settings(&self) -> crate::v2ray_object::stream_settings::StreamSettingsObject {
-        let mut stream_settings = crate::v2ray_object::stream_settings::StreamSettingsObject::default();
+    fn gen_bound_stream_settings(
+        &self,
+    ) -> crate::v2ray_object::stream_settings::StreamSettingsObject {
+        let mut stream_settings =
+            crate::v2ray_object::stream_settings::StreamSettingsObject::default();
 
         stream_settings.network = Some(self.network.clone());
         stream_settings.security = Some(self.stream_security.clone());
 
         if let Some(network) = stream_settings.network.as_ref() {
-
             match network.as_str() {
                 "kcp" => {
-                    let mut kcp_settings = crate::v2ray_object::stream_settings::KcpObject::default();
+                    let mut kcp_settings =
+                        crate::v2ray_object::stream_settings::KcpObject::default();
                     if kcp_settings.header.is_none() {
-                        kcp_settings.header = Some(crate::v2ray_object::stream_settings::HeaderObject::default());
+                        kcp_settings.header =
+                            Some(crate::v2ray_object::stream_settings::HeaderObject::default());
                     }
                     kcp_settings.header.as_mut().unwrap().r#type = Some(self.header_type.clone());
                     stream_settings.kcp_settings = Some(kcp_settings);
                 }
                 "ws" => {
-                    let mut ws_settings = crate::v2ray_object::stream_settings::WebSocketObject::default();
+                    let mut ws_settings =
+                        crate::v2ray_object::stream_settings::WebSocketObject::default();
                     let host = self.request_host.trim().to_string();
                     let path = self.path.trim().to_string();
                     if !host.is_empty() {
                         if ws_settings.headers.is_none() {
                             ws_settings.headers = Some(HashMap::new());
                         }
-                        ws_settings.headers.as_mut().unwrap().insert("host".to_string(), host.clone());
+                        ws_settings
+                            .headers
+                            .as_mut()
+                            .unwrap()
+                            .insert("host".to_string(), host.clone());
                     }
                     if !path.is_empty() {
                         ws_settings.path = Some(path);
                     }
                     stream_settings.ws_settings = Some(ws_settings);
 
-                    let mut tls_settings = crate::v2ray_object::stream_settings::TLSObject::default();
+                    let mut tls_settings =
+                        crate::v2ray_object::stream_settings::TLSObject::default();
                     tls_settings.allow_insecure = Some(false);
                     tls_settings.server_name = Some(host);
 

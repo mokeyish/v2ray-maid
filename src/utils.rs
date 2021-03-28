@@ -18,3 +18,14 @@ where
             .next()
     })
 }
+
+pub fn pick_free_tcp_port() -> u16 {
+    use std::net::TcpListener;
+    if let Ok(listener) = TcpListener::bind("127.0.0.1:0") {
+        if let Ok(local_addr) = listener.local_addr() {
+            return local_addr.port();
+        }
+    }
+    std::thread::sleep(std::time::Duration::from_millis(100));
+    pick_free_tcp_port()
+}

@@ -1,4 +1,4 @@
-use log::info;
+use log::{debug, info};
 use std::convert::TryFrom;
 use std::time::{Duration, Instant};
 
@@ -26,21 +26,21 @@ pub async fn google(label: &str, proxy: Option<&str>, times: i32) -> i32 {
         let mut total = 0;
         let mut timeout = false;
         for i in 0..times {
-            let elapsed_millis = match ping(&client).await {
-                Ok(p) => p,
-                _ => {
-                    timeout = true;
-                    -1
-                }
-            };
-            info!("Ping {} {} elapsed {} ms", label, i, elapsed_millis);
+            let elapsed_millis = ping(&client).await.unwrap_or(-1);
+            debug!("Ping {} {} elapsed {} ms", label, i, elapsed_millis);
+            if elapsed_millis == -1 {
+                timeout = true;
+                debug!("Ping {} skipped.", label);
+                break;
+            }
             total += elapsed_millis;
         }
         let elapsed_millis = total / times;
-        info!("Ping {} average elapsed {} ms", label, elapsed_millis);
         if timeout {
+            info!("Ping {} timeout", label);
             -1
         } else {
+            info!("Ping {} average elapsed {} ms", label, elapsed_millis);
             elapsed_millis
         }
     } else {
