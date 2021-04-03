@@ -58,7 +58,7 @@ fn default_loglevel() -> String {
 }
 
 #[cfg(target_family = "windows")]
-fn default_program1() -> String {
+fn default_program() -> String {
     "v2ray.exe".to_string()
 }
 
