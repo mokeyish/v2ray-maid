@@ -80,6 +80,8 @@ pub mod routing {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub domain: Option<Vec<String>>,
         #[serde(skip_serializing_if = "Option::is_none")]
+        pub app: Option<Vec<String>>,
+        #[serde(skip_serializing_if = "Option::is_none")]
         pub ip: Option<Vec<String>>,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub port: Option<super::Port>,
